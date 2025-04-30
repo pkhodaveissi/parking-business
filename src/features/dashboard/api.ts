@@ -9,6 +9,6 @@ export type ParkingSpace = {
 };
 
 export const getParkingSpaces = async (): Promise<ParkingSpace[]> => {
-  const res = await axios.get('/parking/spaces/list?limit=1000');
+  const res = await axios.get('/parking/spaces/list');
   return res.data.data.parkingSpaces;
 };
