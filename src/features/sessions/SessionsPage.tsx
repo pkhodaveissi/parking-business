@@ -53,7 +53,6 @@ export default function SessionsPage() {
       })();
     return typeMatch && statusMatch && dateMatch;
   });
-
   return (
     <div style={{ padding: '2rem' }}>
       <h2>Active Parking Sessions</h2>
@@ -115,7 +114,7 @@ export default function SessionsPage() {
                   title="Copy full ID"
                   style={{ cursor: 'pointer' }}
                 >
-                  📋
+                 ⿻
                 </button>
               </td>
               <td>{getSessionTypeLabel(session.parkingSpaceId)}</td>
