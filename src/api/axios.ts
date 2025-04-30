@@ -12,4 +12,16 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
+// ⬇️ Response interceptor to catch expired tokens
+instance.interceptors.response.use(
+  res => res,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('accessToken');
+      window.location.href = '/login'; // force logout
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default instance;
