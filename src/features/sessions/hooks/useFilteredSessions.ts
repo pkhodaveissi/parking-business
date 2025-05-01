@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { endSession, getSessions } from '../api';
+import { endSession, getSessions, ParkingSession } from '../api';
+// TODO: Move to a higher level package
+import { getRate } from '@/features/dashboard/hooks/useRevenueMetrics';
 
 export const useFilteredSessions = () => {
   const queryClient = useQueryClient();
@@ -20,6 +22,7 @@ export const useFilteredSessions = () => {
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'ACTIVE' | 'ENDED'>('ALL');
   const [startDateFilter, setStartDateFilter] = useState('');
   const [endDateFilter, setEndDateFilter] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredSessions = sessions.filter((s) => {
     const typeMatch =
@@ -33,20 +36,36 @@ export const useFilteredSessions = () => {
       (statusFilter === 'ACTIVE' && !s.isSessionEnded) ||
       (statusFilter === 'ENDED' && s.isSessionEnded);
 
-      const dateMatch = (() => {
-        // If no date filters are set, let the session through
-        if(!startDateFilter && !endDateFilter) return true;
-        // If filtering by date, skip active sessions
-        if(!s.sessionEndedAt) return false;
-        
-        const endDate = new Date(s.sessionEndedAt);
-        if (startDateFilter && endDate < new Date(startDateFilter)) return false;
-        if (endDateFilter && endDate > new Date(endDateFilter)) return false;
-        return true;
-      })();
+    const plateMatch = s.vehicleLicensePlate.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return typeMatch && statusMatch && dateMatch;
+    const dateMatch = (() => {
+      // If no date filters are set, let the session through
+      if (!startDateFilter && !endDateFilter) return true;
+      // If filtering by date, skip active sessions
+      if (!s.sessionEndedAt) return false;
+
+      const endDate = new Date(s.sessionEndedAt);
+      if (startDateFilter && endDate < new Date(startDateFilter)) return false;
+      if (endDateFilter && endDate > new Date(endDateFilter)) return false;
+      return true;
+    })();
+
+    return plateMatch && typeMatch && statusMatch && dateMatch;
   });
+
+  const isSuspicious = (s: ParkingSession) => {
+    if (s.isSessionEnded) return false; // don't flag ended sessions
+  
+    const startedAt = new Date(s.sessionStartedAt);
+    const now = new Date();
+    const elapsedMinutes = (now.getTime() - startedAt.getTime()) / (1000 * 60);
+    const elapsedHours = elapsedMinutes / 60;
+  
+    const priceEstimate = elapsedHours * getRate(s.parkingSpaceId);
+  
+    return elapsedHours > 8 || priceEstimate > 100;
+  };
+  
 
   return {
     filteredSessions,
@@ -60,5 +79,11 @@ export const useFilteredSessions = () => {
     setStartDateFilter,
     endDateFilter,
     setEndDateFilter,
-  };
+    searchQuery,
+    setSearchQuery,
+    // TODO: move to it's own file if there are more utils to be used
+    utils: {
+      isSuspicious,
+    },
+  }
 };

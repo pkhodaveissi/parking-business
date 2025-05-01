@@ -21,6 +21,9 @@ export default function SessionsPage() {
     setStartDateFilter,
     endDateFilter,
     setEndDateFilter,
+    searchQuery,
+    setSearchQuery,
+    utils,
   } = useFilteredSessions();
 
   if (isLoading) return <p>Loading sessions...</p>;
@@ -31,7 +34,7 @@ export default function SessionsPage() {
       <div style={{ marginBottom: '1rem' }}>
         <label>
           Category:{' '}
-          <select value={vehicleFilter} onChange={(e) => setVehicleFilter(e.target.value as any)}>
+          <select value={vehicleFilter} onChange={(e) => setVehicleFilter(e.target.value)}>
             <option value="ALL">All</option>
             <option value="CAR">Car Space</option>
             <option value="MOTOR">Motorcycle Space</option>
@@ -41,11 +44,16 @@ export default function SessionsPage() {
 
         <label style={{ marginLeft: '2rem' }}>
           Status:{' '}
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as any)}>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="ALL">All</option>
             <option value="ACTIVE">Active</option>
             <option value="ENDED">Ended</option>
           </select>
+        </label>
+
+        <label style={{ marginLeft: '2rem' }}>
+          License Plate:{' '}
+          <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
         </label>
 
         <label style={{ marginLeft: '2rem' }}>
@@ -74,7 +82,13 @@ export default function SessionsPage() {
         </thead>
         <tbody>
           {filteredSessions.map(session => (
-            <tr key={session.parkingSessionId}>
+            <tr
+              key={session.parkingSessionId}
+              style={{
+                backgroundColor:
+                  utils.isSuspicious(session) ? '#fff3cd' : 'transparent', // TODO: Add a badge and a tooltip
+              }}
+            >
               <td style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <code>{session.parkingSessionId.slice(0, 4)}...</code>
                 <button
