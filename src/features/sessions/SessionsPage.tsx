@@ -1,4 +1,4 @@
-import { useFilteredSessions } from './hooks/useFilteredSessions';
+import { StatusFilter, useFilteredSessions, VehicleFilter } from './hooks/useFilteredSessions';
 import './SessionsPage.css';
 
 const getSessionTypeLabel = (id: number): string => {
@@ -23,6 +23,8 @@ export default function SessionsPage() {
     setEndDateFilter,
     searchQuery,
     setSearchQuery,
+    vehicleOptions,
+    statusOptions,
     utils,
   } = useFilteredSessions();
 
@@ -34,20 +36,23 @@ export default function SessionsPage() {
       <div className="filters">
         <label>
           Category:{' '}
-          <select value={vehicleFilter} onChange={(e) => setVehicleFilter(e.target.value)}>
-            <option value="ALL">All</option>
-            <option value="CAR">Car Space</option>
-            <option value="MOTOR">Motorcycle Space</option>
-            <option value="RESIDENT">Resident Space</option>
+          <select value={vehicleFilter} onChange={(e) => setVehicleFilter(e.target.value as VehicleFilter)}>
+            {vehicleOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
           </select>
         </label>
 
         <label style={{ marginLeft: '2rem' }}>
           Status:{' '}
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="ALL">All</option>
-            <option value="ACTIVE">Active</option>
-            <option value="ENDED">Ended</option>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}>
+            {statusOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
           </select>
         </label>
 

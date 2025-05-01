@@ -4,6 +4,12 @@ import { endSession, getSessions, ParkingSession } from '../api';
 // TODO: Move to a higher level package
 import { getRate } from '@/features/dashboard/hooks/useRevenueMetrics';
 
+const vehicleOptions = ['ALL', 'CAR', 'MOTOR', 'RESIDENT'] as const;
+export type VehicleFilter = typeof vehicleOptions[number];
+
+const statusOptions = ['ALL', 'ACTIVE', 'ENDED'] as const;
+export type StatusFilter = typeof statusOptions[number];
+
 export const useFilteredSessions = () => {
   const queryClient = useQueryClient();
   const { data: sessions = [], isLoading } = useQuery({
@@ -18,8 +24,8 @@ export const useFilteredSessions = () => {
     },
   });
 
-  const [vehicleFilter, setVehicleFilter] = useState<'ALL' | 'CAR' | 'MOTOR' | 'RESIDENT'>('ALL');
-  const [statusFilter, setStatusFilter] = useState<'ALL' | 'ACTIVE' | 'ENDED'>('ALL');
+  const [vehicleFilter, setVehicleFilter] = useState<VehicleFilter>('ALL');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
   const [startDateFilter, setStartDateFilter] = useState('');
   const [endDateFilter, setEndDateFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -81,6 +87,8 @@ export const useFilteredSessions = () => {
     setEndDateFilter,
     searchQuery,
     setSearchQuery,
+    vehicleOptions,
+    statusOptions,
     // TODO: move to it's own file if there are more utils to be used
     utils: {
       isSuspicious,
