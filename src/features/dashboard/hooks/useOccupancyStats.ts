@@ -9,14 +9,32 @@ export const useOccupancyStats = () => {
 
   const getStats = (spaceId: 1 | 2 | 3) => {
     const group = spaces.find((s) => s.parkingSpaceId === spaceId);
-    if (!group) return { occupied: 0, capacity: 0, percent: 0 };
-
-    const capacity = group.capacity ?? 0;
-    const freeSpots = Math.abs(group.occupancy ?? 0);
-    const occupied = capacity - freeSpots;
-    const percent = capacity > 0 ? Math.round((occupied / capacity) * 100) : 0;
-
-    return { occupied, capacity, percent };
+    if (!group) {
+      console.warn(`No data found for parkingSpaceId: ${spaceId}`);
+      return { occupied: 0, capacity: 0, percent: null };
+    }
+  
+    const rawCapacity = group.capacity ?? 0;
+    const rawOccupancy = group.occupancy ?? 0;
+  
+    const hasBug = rawCapacity < 0 || rawOccupancy < 0;
+    if (hasBug) {
+      console.warn('Backend bug detected in occupancy data:', {
+        spaceId,
+        capacity: rawCapacity,
+        occupancy: rawOccupancy,
+      });
+    }
+  
+    const capacity = Math.max(0, rawCapacity);
+    const occupancy = Math.max(0, rawOccupancy);
+    const percent = capacity > 0 ? Math.round((occupancy / capacity) * 100) : null;
+  
+    return {
+      occupied: occupancy,
+      capacity,
+      percent,
+    };
   };
 
   return {
