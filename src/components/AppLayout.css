@@ -1,0 +1,30 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md);
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  font-family: var(--font-base);
+}
+
+.app-header nav {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.app-header a {
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.app-header a.active {
+  font-weight: bold;
+  color: var(--color-accent);
+}
+
+.app-header .user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}

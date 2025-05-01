@@ -2,6 +2,7 @@ import { useAuth } from '@/auth/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { getCurrentUser } from '@/features/auth/api';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import './AppLayout.css';
 
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const { logout } = useAuth();
@@ -21,39 +22,25 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div>
-      <header style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem' }}>
+      <header className="app-header">
         <div>
           <strong>ParkingBusiness</strong>
         </div>
-        <nav style={{ display: 'flex', gap: '1.5rem' }}>
-          <Link
-            to="/dashboard"
-            style={{
-              fontWeight: isActive('/dashboard') ? 'bold' : 'normal',
-              textDecoration: 'none'
-            }}
-          >
+        <nav>
+          <Link to="/dashboard" className={isActive('/dashboard') ? 'active' : ''}>
             Dashboard
           </Link>
-          <Link
-            to="/sessions"
-            style={{
-              fontWeight: isActive('/sessions') ? 'bold' : 'normal',
-              textDecoration: 'none'
-            }}
-          >
+          <Link to="/sessions" className={isActive('/sessions') ? 'active' : ''}>
             Sessions
           </Link>
         </nav>
-        <div>
+        <div className="user-info">
           {isLoading ? (
             'Loading user...'
           ) : (
             <>
               <span>{user?.email}</span>
-              <button style={{ marginLeft: '1rem' }} onClick={handleLogout}>
-                Logout
-              </button>
+              <button onClick={handleLogout}>Logout</button>
             </>
           )}
         </div>

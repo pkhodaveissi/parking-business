@@ -1,0 +1,19 @@
+.dashboard {
+  padding: var(--space-lg);
+}
+
+.dashboard h2 {
+  margin-bottom: var(--space-md);
+}
+
+.revenue-block {
+  margin-top: var(--space-lg);
+}
+
+.revenue-block h3 {
+  margin-bottom: var(--space-xs);
+}
+
+.revenue-block p {
+  font-weight: bold;
+}

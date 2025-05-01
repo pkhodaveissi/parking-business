@@ -1,15 +1,20 @@
 /* styles/theme.css */
 
 :root {
-  --color-bg: #f8f9fa;
-  --color-text: #212529;
-  --color-primary: #0070f3;
-  --color-border: #dee2e6;
-  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --color-bg: #f9f9f9;
+  --color-text: #111;
+  --color-accent: #0070f3;
+  --color-muted: #666;
+  --color-warning: #ffa726;
 
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
+  --font-base: 'Segoe UI', sans-serif;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+
+  --border-radius: 6px;
 }
 
 body {
@@ -25,3 +30,7 @@ input, button {
   font-family: inherit;
   font-size: 1rem;
 }
+
+
+
+
