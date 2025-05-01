@@ -1,5 +1,5 @@
 import { useFilteredSessions } from './hooks/useFilteredSessions';
-
+import './SessionsPage.css';
 
 const getSessionTypeLabel = (id: number): string => {
   if (id === 1) return 'Resident Sp.';
@@ -28,10 +28,10 @@ export default function SessionsPage() {
 
   if (isLoading) return <p>Loading sessions...</p>;
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className="sessions-page">
       <h2>Active Parking Sessions</h2>
 
-      <div style={{ marginBottom: '1rem' }}>
+      <div className="filters">
         <label>
           Category:{' '}
           <select value={vehicleFilter} onChange={(e) => setVehicleFilter(e.target.value)}>
@@ -66,63 +66,61 @@ export default function SessionsPage() {
           <input type="date" value={endDateFilter} onChange={(e) => setEndDateFilter(e.target.value)} />
         </label>
       </div>
-
-      <table border={1} cellPadding={8}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Category</th>
-            <th>License Plate</th>
-            <th>Type</th>
-            <th>Started At</th>
-            <th>Ended At</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredSessions.map(session => (
-            <tr
-              key={session.parkingSessionId}
-              style={{
-                backgroundColor:
-                  utils.isSuspicious(session) ? '#fff3cd' : 'transparent', // TODO: Add a badge and a tooltip
-              }}
-            >
-              <td style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <code>{session.parkingSessionId.slice(0, 4)}...</code>
-                <button
-                  onClick={() => navigator.clipboard.writeText(session.parkingSessionId)}
-                  title="Copy full ID"
-                  style={{ cursor: 'pointer' }}
-                >
-                  ⿻
-                </button>
-              </td>
-              <td>{getSessionTypeLabel(session.parkingSpaceId)}</td>
-              <td>{session.vehicleLicensePlate}</td>
-              <td>{session.vehicleType}</td>
-              <td>{new Date(session.sessionStartedAt).toLocaleString()}</td>
-              <td>
-                {session.sessionEndedAt
-                  ? new Date(session.sessionEndedAt).toLocaleString()
-                  : '-'}
-              </td>
-              <td>{session.isSessionEnded ? 'Ended' : 'Active'}</td>
-              <td>
-                {!session.isSessionEnded && (
-                  <button
-                    onClick={() => mutation.mutate(session.parkingSessionId)}
-                    disabled={mutation.isPending}
-                  >
-                    {mutation.isPending ? 'Ending...' : 'End'}
-                  </button>
-                )}
-              </td>
+      <div className="table-container">
+        <table className="sessions-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Category</th>
+              <th>License Plate</th>
+              <th>Type</th>
+              <th>Started At</th>
+              <th>Ended At</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredSessions.map(session => (
+              <tr
+                key={session.parkingSessionId}
+                className={utils.isSuspicious(session) ? 'suspicious-row' : ''}
+              >
+                <td style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <code>{session.parkingSessionId.slice(0, 4)}...</code>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(session.parkingSessionId)}
+                    title="Copy full ID"
+                    className="copy-button"
+                  >
+                    ⿻
+                  </button>
+                </td>
+                <td>{getSessionTypeLabel(session.parkingSpaceId)}</td>
+                <td>{session.vehicleLicensePlate}</td>
+                <td>{session.vehicleType}</td>
+                <td>{new Date(session.sessionStartedAt).toLocaleString()}</td>
+                <td>
+                  {session.sessionEndedAt
+                    ? new Date(session.sessionEndedAt).toLocaleString()
+                    : '-'}
+                </td>
+                <td>{session.isSessionEnded ? 'Ended' : 'Active'}</td>
+                <td>
+                  {!session.isSessionEnded && (
+                    <button
+                      onClick={() => mutation.mutate(session.parkingSessionId)}
+                      disabled={mutation.isPending}
+                    >
+                      {mutation.isPending ? 'Ending...' : 'End'}
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
