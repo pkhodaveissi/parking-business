@@ -32,10 +32,11 @@
   font-size: 0.95rem;
 }
 
-.sessions-table th,
-.sessions-table td {
-  border: 1px solid #ddd;
+.sessions-table td,
+.sessions-table th {
+  vertical-align: middle;
   padding: var(--space-sm);
+  border: 1px solid #ddd;
 }
 
 .sessions-table th {
@@ -91,7 +92,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   gap: var(--space-xs);
+  min-height: 44px;
 }
 
 .action-plate-link {

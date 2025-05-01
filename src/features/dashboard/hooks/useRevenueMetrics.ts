@@ -1,11 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { DashboardSession, getEndedSessions } from '../api';
-
-export const getRate = (spaceId: number) => {
-  if (spaceId === 2) return 5;
-  if (spaceId === 3) return 3;
-  return 0;
-};
+import { getEndedSessions } from '../api';
+import { calculateRevenue } from '@/utils/revenue';
 
 const euroFormatter = new Intl.NumberFormat('en-NL', {
   style: 'currency',
@@ -14,11 +9,6 @@ const euroFormatter = new Intl.NumberFormat('en-NL', {
   maximumFractionDigits: 2,
 });
 
-const calculateRevenue = (sessions: DashboardSession[]) =>
-  sessions.reduce((sum, s) => {
-    const minutes = s.sessionLengthInHoursMinutes || 0;
-    return sum + (minutes / 60) * getRate(s.parkingSpaceId);
-  }, 0);
 
 export const useRevenueMetrics = () => {
   const { data: sessions = [], isLoading: loadingAll } = useQuery({

@@ -1,5 +1,6 @@
 import { StatusFilter, useFilteredSessions, VehicleFilter } from './hooks/useFilteredSessions';
 import './SessionsPage.css';
+import { isSuspicious } from './utils/isSuspicious';
 
 const getSessionTypeLabel = (id: number): string => {
   if (id === 1) return 'Resident Sp.';
@@ -25,7 +26,6 @@ export default function SessionsPage() {
     setSearchQuery,
     vehicleOptions,
     statusOptions,
-    utils,
   } = useFilteredSessions();
 
   if (isLoading) return <p>Loading sessions...</p>;
@@ -45,7 +45,7 @@ export default function SessionsPage() {
           </select>
         </label>
 
-        <label style={{ marginLeft: '2rem' }}>
+        <label>
           Status:{' '}
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}>
             {statusOptions.map((option) => (
@@ -56,17 +56,17 @@ export default function SessionsPage() {
           </select>
         </label>
 
-        <label style={{ marginLeft: '2rem' }}>
+        <label>
           License Plate:{' '}
           <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
         </label>
 
-        <label style={{ marginLeft: '2rem' }}>
+        <label>
           Ended After:{' '}
           <input type="date" value={startDateFilter} onChange={(e) => setStartDateFilter(e.target.value)} />
         </label>
 
-        <label style={{ marginLeft: '2rem' }}>
+        <label>
           Ended Before:{' '}
           <input type="date" value={endDateFilter} onChange={(e) => setEndDateFilter(e.target.value)} />
         </label>
@@ -89,9 +89,9 @@ export default function SessionsPage() {
             {filteredSessions.map(session => (
               <tr
                 key={session.parkingSessionId}
-                className={utils.isSuspicious(session) ? 'suspicious-row' : ''}
+                className={isSuspicious(session) ? 'suspicious-row' : ''}
               >
-                <td style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <td>
                   <code>{session.parkingSessionId.slice(0, 4)}...</code>
                   <button
                     onClick={() => navigator.clipboard.writeText(session.parkingSessionId)}

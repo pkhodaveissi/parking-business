@@ -1,14 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { endSession, getSessions, ParkingSession } from '../api';
-// TODO: Move to a higher level package
-import { getRate } from '@/features/dashboard/hooks/useRevenueMetrics';
+import { endSession, getSessions } from '../api';
 
 const vehicleOptions = ['ALL', 'CAR', 'MOTOR', 'RESIDENT'] as const;
 export type VehicleFilter = typeof vehicleOptions[number];
 
 const statusOptions = ['ALL', 'ACTIVE', 'ENDED'] as const;
 export type StatusFilter = typeof statusOptions[number];
+
+
 
 export const useFilteredSessions = () => {
   const queryClient = useQueryClient();
@@ -58,19 +58,6 @@ export const useFilteredSessions = () => {
 
     return plateMatch && typeMatch && statusMatch && dateMatch;
   });
-
-  const isSuspicious = (s: ParkingSession) => {
-    if (s.isSessionEnded) return false; // don't flag ended sessions
-  
-    const startedAt = new Date(s.sessionStartedAt);
-    const now = new Date();
-    const elapsedMinutes = (now.getTime() - startedAt.getTime()) / (1000 * 60);
-    const elapsedHours = elapsedMinutes / 60;
-  
-    const priceEstimate = elapsedHours * getRate(s.parkingSpaceId);
-  
-    return elapsedHours > 8 || priceEstimate > 100;
-  };
   
 
   return {
@@ -89,9 +76,5 @@ export const useFilteredSessions = () => {
     setSearchQuery,
     vehicleOptions,
     statusOptions,
-    // TODO: move to it's own file if there are more utils to be used
-    utils: {
-      isSuspicious,
-    },
   }
 };
