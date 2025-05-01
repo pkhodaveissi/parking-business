@@ -64,6 +64,15 @@
   padding: 0;
 }
 
+.plate-button {
+  cursor: pointer;
+  color: var(--color-accent);
+  text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+}
 
 .suspicious-row {
   background-color: #fff7e6;
@@ -76,4 +85,28 @@
   padding: 2px 6px;
   border-radius: var(--border-radius);
   margin-left: var(--space-xs);
+}
+
+.action-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+}
+
+.action-plate-link {
+  all: unset;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.end-button {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: var(--border-radius);
+  cursor: pointer;
 }

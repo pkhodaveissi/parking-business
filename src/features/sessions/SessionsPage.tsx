@@ -106,9 +106,17 @@ export default function SessionsPage() {
                     : '-'}
                 </td>
                 <td>{session.isSessionEnded ? 'Ended' : 'Active'}</td>
-                <td>
+                <td className="action-cell">
+                  <button
+                    className="action-plate-link"
+                    onClick={() => setSearchQuery(session.vehicleLicensePlate)}
+                  >
+                    {session.vehicleLicensePlate}
+                  </button>
+
                   {!session.isSessionEnded && (
                     <button
+                      className="end-button"
                       onClick={() => mutation.mutate(session.parkingSessionId)}
                       disabled={mutation.isPending}
                     >
