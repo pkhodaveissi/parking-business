@@ -4,7 +4,7 @@ import { OccupancyBlock } from './components/OccupancyBlock';
 
 export default function DashboardPage() {
   const { residentStats, carStats, motorcycleStats, isLoading: loadingOccupancy } = useOccupancyStats();
-  const { totalRevenue, todayRevenue, isLoading: loadingRevenue } = useRevenueMetrics();
+  const { totalFormatted, todayFormatted, isLoading: loadingRevenue } = useRevenueMetrics();
 
   if (loadingOccupancy || loadingRevenue) return <p>Loading...</p>;
 
@@ -16,10 +16,10 @@ export default function DashboardPage() {
       <OccupancyBlock label="Motorcycles" stats={motorcycleStats} />
 
       <h3>Total Revenue</h3>
-      <p>€{totalRevenue.toFixed(2)}</p>
+      <p>{totalFormatted}</p>
 
       <h3>Today’s Revenue</h3>
-      <p>€{todayRevenue.toFixed(2)}</p>
+      <p>{todayFormatted}</p>
     </div>
   );
 }

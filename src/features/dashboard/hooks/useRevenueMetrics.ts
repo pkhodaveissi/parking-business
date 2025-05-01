@@ -1,11 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import { DashboardSession, getEndedSessions } from '../api';
 
-const getRate = (spaceId: number) => {
+export const getRate = (spaceId: number) => {
   if (spaceId === 2) return 5;
   if (spaceId === 3) return 3;
   return 0;
 };
+
+const euroFormatter = new Intl.NumberFormat('en-NL', {
+  style: 'currency',
+  currency: 'EUR',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
 const calculateRevenue = (sessions: DashboardSession[]) =>
   sessions.reduce((sum, s) => {
@@ -27,10 +34,14 @@ export const useRevenueMetrics = () => {
     queryKey: ['endedSessionsToday'],
     queryFn: () => getEndedSessions(startOfDay, endOfDay),
   });
-
+  const totalRaw = Math.round(calculateRevenue(sessions) * 100) / 100;
+  const todayRaw = Math.round(calculateRevenue(todaySessions) * 100) / 100;
+  
   return {
-    totalRevenue: Math.round(calculateRevenue(sessions) * 100) / 100,
-    todayRevenue: Math.round(calculateRevenue(todaySessions) * 100) / 100,
+    totalRevenue: totalRaw,
+    todayRevenue: todayRaw,
+    totalFormatted: euroFormatter.format(totalRaw),
+    todayFormatted: euroFormatter.format(todayRaw),
     isLoading: loadingAll || loadingToday,
   };
 };
