@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getSessions, endSession } from './api';
+import { useFilteredSessions } from './hooks/useFilteredSessions';
+
 
 const getSessionTypeLabel = (id: number): string => {
   if (id === 1) return 'Resident Sp.';
@@ -8,54 +7,27 @@ const getSessionTypeLabel = (id: number): string => {
   if (id === 3) return 'Motorcycle Sp.';
   return 'Unknown';
 };
+
 export default function SessionsPage() {
-  const queryClient = useQueryClient();
-  // TODO: move logic to a custom hook
-  const { data: sessions, isLoading } = useQuery({
-    queryKey: ['sessions'],
-    queryFn: getSessions,
-  });
-
-  const mutation = useMutation({
-    mutationFn: endSession,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sessions'] });
-    },
-  });
-
-  // TODO: Use the same type axios call has with a pluck to avoid repetition
-  const [vehicleFilter, setVehicleFilter] = useState<'ALL' | 'CAR' | 'MOTOR' | 'RESIDENT'>('ALL');
-  const [statusFilter, setStatusFilter] = useState<'ALL' | 'ACTIVE' | 'ENDED'>('ALL');
-  const [startDateFilter, setStartDateFilter] = useState('');
-  const [endDateFilter, setEndDateFilter] = useState('');
+  const {
+    filteredSessions,
+    mutation,
+    isLoading,
+    vehicleFilter,
+    setVehicleFilter,
+    statusFilter,
+    setStatusFilter,
+    startDateFilter,
+    setStartDateFilter,
+    endDateFilter,
+    setEndDateFilter,
+  } = useFilteredSessions();
 
   if (isLoading) return <p>Loading sessions...</p>;
-  if (!sessions) return <p>Error loading sessions.</p>;
-
-  const filteredSessions = sessions.filter((s) => {
-    const typeMatch =
-      vehicleFilter === 'ALL' ||
-      (vehicleFilter === 'RESIDENT' && s.parkingSpaceId === 1) ||
-      (vehicleFilter === 'CAR' && s.parkingSpaceId === 2) ||
-      (vehicleFilter === 'MOTOR' && s.parkingSpaceId === 3);
-
-    const statusMatch =
-      statusFilter === 'ALL' ||
-      (statusFilter === 'ACTIVE' && !s.isSessionEnded) ||
-      (statusFilter === 'ENDED' && s.isSessionEnded);
-
-    const dateMatch = (() => {
-        if (!s.sessionEndedAt) return false;
-        const endDate = new Date(s.sessionEndedAt);
-        if (startDateFilter && endDate < new Date(startDateFilter)) return false;
-        if (endDateFilter && endDate > new Date(endDateFilter)) return false;
-        return true;
-      })();
-    return typeMatch && statusMatch && dateMatch;
-  });
   return (
     <div style={{ padding: '2rem' }}>
       <h2>Active Parking Sessions</h2>
+
       <div style={{ marginBottom: '1rem' }}>
         <label>
           Category:{' '}
@@ -66,6 +38,7 @@ export default function SessionsPage() {
             <option value="RESIDENT">Resident Space</option>
           </select>
         </label>
+
         <label style={{ marginLeft: '2rem' }}>
           Status:{' '}
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as any)}>
@@ -74,23 +47,18 @@ export default function SessionsPage() {
             <option value="ENDED">Ended</option>
           </select>
         </label>
+
         <label style={{ marginLeft: '2rem' }}>
           Ended After:{' '}
-          <input
-            type="date"
-            value={startDateFilter}
-            onChange={(e) => setStartDateFilter(e.target.value)}
-          />
+          <input type="date" value={startDateFilter} onChange={(e) => setStartDateFilter(e.target.value)} />
         </label>
+
         <label style={{ marginLeft: '2rem' }}>
           Ended Before:{' '}
-          <input
-            type="date"
-            value={endDateFilter}
-            onChange={(e) => setEndDateFilter(e.target.value)}
-          />
+          <input type="date" value={endDateFilter} onChange={(e) => setEndDateFilter(e.target.value)} />
         </label>
       </div>
+
       <table border={1} cellPadding={8}>
         <thead>
           <tr>
@@ -114,7 +82,7 @@ export default function SessionsPage() {
                   title="Copy full ID"
                   style={{ cursor: 'pointer' }}
                 >
-                 ⿻
+                  ⿻
                 </button>
               </td>
               <td>{getSessionTypeLabel(session.parkingSpaceId)}</td>

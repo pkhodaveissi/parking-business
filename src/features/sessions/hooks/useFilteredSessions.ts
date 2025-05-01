@@ -1,0 +1,64 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { endSession, getSessions } from '../api';
+
+export const useFilteredSessions = () => {
+  const queryClient = useQueryClient();
+  const { data: sessions = [], isLoading } = useQuery({
+    queryKey: ['sessions'],
+    queryFn: getSessions,
+  });
+
+  const mutation = useMutation({
+    mutationFn: endSession,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['sessions'] });
+    },
+  });
+
+  const [vehicleFilter, setVehicleFilter] = useState<'ALL' | 'CAR' | 'MOTOR' | 'RESIDENT'>('ALL');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'ACTIVE' | 'ENDED'>('ALL');
+  const [startDateFilter, setStartDateFilter] = useState('');
+  const [endDateFilter, setEndDateFilter] = useState('');
+
+  const filteredSessions = sessions.filter((s) => {
+    const typeMatch =
+      vehicleFilter === 'ALL' ||
+      (vehicleFilter === 'RESIDENT' && s.parkingSpaceId === 1) ||
+      (vehicleFilter === 'CAR' && s.parkingSpaceId === 2) ||
+      (vehicleFilter === 'MOTOR' && s.parkingSpaceId === 3);
+
+    const statusMatch =
+      statusFilter === 'ALL' ||
+      (statusFilter === 'ACTIVE' && !s.isSessionEnded) ||
+      (statusFilter === 'ENDED' && s.isSessionEnded);
+
+      const dateMatch = (() => {
+        // If no date filters are set, let the session through
+        if(!startDateFilter && !endDateFilter) return true;
+        // If filtering by date, skip active sessions
+        if(!s.sessionEndedAt) return false;
+        
+        const endDate = new Date(s.sessionEndedAt);
+        if (startDateFilter && endDate < new Date(startDateFilter)) return false;
+        if (endDateFilter && endDate > new Date(endDateFilter)) return false;
+        return true;
+      })();
+
+    return typeMatch && statusMatch && dateMatch;
+  });
+
+  return {
+    filteredSessions,
+    mutation,
+    isLoading,
+    vehicleFilter,
+    setVehicleFilter,
+    statusFilter,
+    setStatusFilter,
+    startDateFilter,
+    setStartDateFilter,
+    endDateFilter,
+    setEndDateFilter,
+  };
+};
