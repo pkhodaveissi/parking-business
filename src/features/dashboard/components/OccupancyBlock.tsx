@@ -1,5 +1,11 @@
 import './OccupancyBlock.css';
 
+
+/* Design note: 
+  We considered a render prop pattern for OccupancyBlock, 
+  but decided against it to keep the component stateless and declarative.
+  Logic stays in useOccupancyStats, preserving testability and composability. 
+*/
 export const OccupancyBlock = ({
   label,
   stats,
@@ -21,9 +27,8 @@ export const OccupancyBlock = ({
 
     <div className="occupancy-bar">
       <div
-        className={`occupancy-bar-fill ${
-          stats.hasBackendBug ? 'bug-fill' : ''
-        }`}
+        className={`occupancy-bar-fill ${stats.hasBackendBug ? 'bug-fill' : ''
+          }`}
         style={{ width: `${stats.percent ?? 100}%` }}
       />
     </div>
