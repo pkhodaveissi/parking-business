@@ -20,7 +20,10 @@ A lightweight, operator-facing frontend for managing parking space sessions, bui
 ## 🚀 Deployment
 
 Deployed on **Vercel**
+
 👉 https://parking-business-m4gqe58ln-pooriakhodaveissis-projects.vercel.app/
+
+👉 https://parking-business-three.vercel.app
 
 ---
 
