@@ -82,6 +82,10 @@ npm test
   // Recommend returning to server-side filtering soon.
   ```
 - 🧪 All core logic (rates, revenue, suspicion, occupancy calc) covered by unit tests
+- 📗 Data types are defined locally. While effective, we recommend exploring a
+shared, centralized type system (e.g. codegen from OpenAPI or shared types via a monorepo),
+similar to Airbnb's practice of syncing backend and frontend models. This helps eliminate
+drift and boosts confidence in edge cases.
 
 ---
 
@@ -94,6 +98,16 @@ npm test
 - `src/utils/revenue.test.ts` ✅
 - `src/utils/isSuspicious.test.ts` ✅
 - `features/dashboard/utils/getStats.test.ts` ✅
+
+---
+
+## 🤔 Known Limitations
+
+- Locally defined data types.
+- Auth token is stored in localStorage, allowing persistence across reloads. An interceptor handles 401 errors by logging out. However, there is no token refresh or session rehydration logic. Intended for demo purposes only.
+- Error boundaries not fully implemented (API failures will crash the route).
+- Filtering is client-side for now; recommend re-enabling API-based filtering when backend supports reliable date queries.
+- No e2e or integration test coverage; only business logic is unit-tested.
 
 ---
 
