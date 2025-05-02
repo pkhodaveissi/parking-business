@@ -4,6 +4,8 @@ import LoginPage from './features/auth/LoginPage';
 import DashboardPage from './features/dashboard/DashboardPage';
 import SessionsPage from './features/sessions/SessionsPage';
 import { RequireAuth } from './auth/RequireAuth';
+import { Suspense } from 'react';
+import { DashboardSkeleton } from './features/dashboard/components/DashboardSkeleton';
 export default function App() {
 
   return (
@@ -15,7 +17,9 @@ export default function App() {
         element={
           <RequireAuth>
             <AppLayout>
-              <DashboardPage />
+              <Suspense fallback={<DashboardSkeleton />}>
+                <DashboardPage />
+              </Suspense>
             </AppLayout>
           </RequireAuth>
         }

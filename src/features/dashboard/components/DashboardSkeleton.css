@@ -1,0 +1,45 @@
+.skeleton-section {
+  margin-bottom: 2rem;
+}
+
+.skeleton-label {
+  height: 16px;
+  background-color: #f0f0f0;
+  width: 120px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.skeleton-bar {
+  height: 12px;
+  background-color: #eee;
+  border-radius: 6px;
+  width: 100%;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-small {
+  height: 16px;
+  background-color: #f0f0f0;
+  width: 100px;
+  border-radius: 4px;
+}
+
+.skeleton-smaller {
+  height: 16px;
+  background-color: #f0f0f0;
+  width: 60px;
+  border-radius: 4px;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}

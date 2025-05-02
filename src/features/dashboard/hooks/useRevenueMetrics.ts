@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getEndedSessions } from '../api';
 import { calculateRevenue } from '@/utils/revenue';
 
@@ -11,7 +11,7 @@ const euroFormatter = new Intl.NumberFormat('en-NL', {
 
 
 export const useRevenueMetrics = () => {
-  const { data: sessions = [], isLoading: loadingAll } = useQuery({
+  const { data: sessions = [], isLoading: loadingAll } = useSuspenseQuery({
     queryKey: ['endedSessions'],
     queryFn: () => getEndedSessions(),
   });
@@ -20,7 +20,7 @@ export const useRevenueMetrics = () => {
   const startOfDay = new Date(today.setHours(0, 0, 0, 0)).toISOString();
   const endOfDay = new Date(today.setHours(23, 59, 59, 999)).toISOString();
 
-  const { data: todaySessions = [], isLoading: loadingToday } = useQuery({
+  const { data: todaySessions = [], isLoading: loadingToday } = useSuspenseQuery({
     queryKey: ['endedSessionsToday'],
     queryFn: () => getEndedSessions(startOfDay, endOfDay),
   });

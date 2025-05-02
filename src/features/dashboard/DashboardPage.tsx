@@ -4,10 +4,8 @@ import { OccupancyBlock } from './components/OccupancyBlock';
 import './DashboardPage.css';
 
 export default function DashboardPage() {
-  const { residentStats, carStats, motorcycleStats, isLoading: loadingOccupancy } = useOccupancyStats();
-  const { totalFormatted, todayFormatted, isLoading: loadingRevenue } = useRevenueMetrics();
-
-  if (loadingOccupancy || loadingRevenue) return <p>Loading...</p>;
+  const { residentStats, carStats, motorcycleStats } = useOccupancyStats();
+  const { totalFormatted, todayFormatted } = useRevenueMetrics();
 
   return (
     <div className="dashboard">
