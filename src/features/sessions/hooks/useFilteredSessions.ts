@@ -9,7 +9,18 @@ const statusOptions = ['ALL', 'ACTIVE', 'ENDED'] as const;
 export type StatusFilter = typeof statusOptions[number];
 
 
-
+/**
+ * Note: We initially planned to use API-based filtering (e.g. sessionEndedAtFrom / To)
+ * to offload filtering to the backend. However, we encountered issues with how the
+ * date parameters were parsed or matched on the server, leading to inconsistent results.
+ *
+ * As a temporary solution, we perform client-side filtering here to avoid blocking
+ * progress. This ensures a responsive UI and consistent behavior.
+ *
+ * TODO: Revisit API-based filtering once the backend supports reliable
+ * date range filtering or provides clearer documentation. Shifting this logic server-side
+ * will improve performance on large datasets.
+ */
 export const useFilteredSessions = () => {
   const queryClient = useQueryClient();
   const { data: sessions = [], isLoading } = useQuery({
