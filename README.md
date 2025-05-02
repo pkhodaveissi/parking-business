@@ -58,7 +58,7 @@ src/
 
 ```bash
 # Clone and install
-git clone https://github.com/your-org/parking-business
+git clone https://github.com/pkhodaveissi/parking-business
 cd parking-business
 npm install
 
