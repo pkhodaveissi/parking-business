@@ -1,54 +1,112 @@
-# React + TypeScript + Vite
+# 🚗 ParkingBusiness – Admin Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight, operator-facing frontend for managing parking space sessions, built with **React**, **TypeScript**, and **Vite**. Designed to be fast, clear, and maintainable.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- 🔐 **Login page** – secure, scoped form styling (no frameworks)
+- 📊 **Dashboard** – live occupancy stats with visual bars and revenue overview
+- 📋 **Sessions page** – filterable view of all sessions, with support for ending active ones
+- ⚠️ **Suspicious detection** – highlights unusually long or costly sessions
+- 🔍 **Flexible client-side filters** – by type, license plate, status, and end date
+- 🛠️ **Backend bug handling** – logs and flags broken data (e.g. negative occupancy)
+- 💅 **Pure CSS** – consistent visual style using `theme.css` and no external frameworks
+- 🧪 **Unit tests** – core business logic is tested using Vitest (e.g. revenue, suspicion, stats)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🚀 Deployment
+
+Deployed on **Vercel**
+👉 https://parking-business-m4gqe58ln-pooriakhodaveissis-projects.vercel.app/
+
+---
+
+## 🧑‍💻 Tech Stack
+
+- **React + Vite** (with TypeScript)
+- **@tanstack/react-query v5** for data fetching
+- **React Router v6** for page routing
+- **Vitest** for unit testing
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+├── api/                 # Axios config
+├── auth/                # Auth hooks & guards
+├── components/          # Layout shell (AppLayout)
+├── features/
+│   ├── auth/            # Login form
+│   ├── dashboard/       # Dashboard UI & logic
+│   └── sessions/        # Session table, filters, utils
+├── hooks/               # Custom hooks (e.g. useFilteredSessions)
+├── styles/              # Global theme (theme.css)
+├── utils/               # Business logic (revenue, suspicion)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📦 Getting Started
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+# Clone and install
+git clone https://github.com/your-org/parking-business
+cd parking-business
+npm install
+
+# Run locally
+npm run dev
+
+# Run unit tests
+npm test
 ```
+
+---
+
+## 🧠 Notable Decisions
+
+- ⚠️ **Occupancy logic moved out of hooks** into a reusable `getStats()` utility
+- 💬 **Suspense + useSuspenseQuery** used for clean async loading
+- 📌 **Client-side filtering** used temporarily in `useFilteredSessions`
+  ```ts
+  // API filtering caused issues with date parameters.
+  // We fallback to client-side logic to unblock progress.
+  // Recommend returning to server-side filtering soon.
+  ```
+- 🧪 All core logic (rates, revenue, suspicion, occupancy calc) covered by unit tests
+
+---
+
+## 🧪 Tests
+
+```bash
+npm test
+```
+
+- `src/utils/revenue.test.ts` ✅
+- `src/utils/isSuspicious.test.ts` ✅
+- `features/dashboard/utils/getStats.test.ts` ✅
+
+---
+
+## 🧼 Polish
+
+- Skeleton loading UI during dashboard suspense
+- Sticky table headers for large session lists
+- Clipboard buttons for copying session IDs
+- Color-coded visual cues for errors and status
+
+---
+
+## 📬 Contact
+
+Feel free to reach out for questions or feedback.
+Whatsapp: +31687990641 Pouria
+
+---
+
