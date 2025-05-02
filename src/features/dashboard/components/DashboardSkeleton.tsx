@@ -13,8 +13,8 @@ export const DashboardSkeleton = () => {
     <div style={{ padding: '2rem' }}>
       <h2>Occupancy Overview</h2>
       <Section label="Residents" />
-      <Section label="Cars" />
-      <Section label="Motorcycles" />
+      <Section label="Non-Resident Cars" />
+      <Section label="Non-Resident Motorcycles" />
 
       <div className="revenue-block">
         <h3>Total Revenue</h3>

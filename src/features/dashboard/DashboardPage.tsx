@@ -11,8 +11,8 @@ export default function DashboardPage() {
     <div className="dashboard">
       <h2>Occupancy Overview</h2>
       <OccupancyBlock label="Residents" stats={residentStats} />
-      <OccupancyBlock label="Cars" stats={carStats} />
-      <OccupancyBlock label="Motorcycles" stats={motorcycleStats} />
+      <OccupancyBlock label="Non-Resident Cars" stats={carStats} />
+      <OccupancyBlock label="Non-Resident Motorcycles" stats={motorcycleStats} />
 
       <div className="revenue-block">
         <h3>Total Revenue</h3>
