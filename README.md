@@ -105,9 +105,10 @@ npm test
 
 - Locally defined data types.
 - Auth token is stored in localStorage, allowing persistence across reloads. An interceptor handles 401 errors by logging out. However, there is no token refresh or session rehydration logic. Intended for demo purposes only.
-- Error boundaries not fully implemented (API failures will crash the route).
+- Error boundaries are not fully implemented (API failures will crash the route).
 - Filtering is client-side for now; recommend re-enabling API-based filtering when backend supports reliable date queries.
 - No e2e or integration test coverage; only business logic is unit-tested.
+- No accessibility attributes
 
 ---
 
